@@ -53,6 +53,11 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(activity, PERMISSION_AUDIO,
                     GET_RECODE_AUDIO);
         }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
+            }
+        }
     }
 
     @Override
@@ -84,11 +89,7 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-            }
-        }
+
         verifyAudioPermissions(this);
     }
 
