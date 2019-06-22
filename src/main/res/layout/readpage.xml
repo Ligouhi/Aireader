@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/rp_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background"
+         />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="5"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:layout_height="1dp"
+        android:background="@color/background"
+        >
+        <TextView
+            android:id="@+id/rppasname_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Testing"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            />
+        <TextView
+            android:layout_marginVertical="20dp"
+            android:id="@+id/rpauthor_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="author"
+            android:textSize="20sp"
+            android:layout_marginLeft="20sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="20sp"
+            android:layout_height="match_parent"
+            android:text="I say to you, my friends, so even though we must face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in the American dream.
+I have a dream that one day this nation will rise up and live out the true meaning of its creed - we hold these truths to be self-evident, that all men are created equal.
+I have a dream that one day on the red hills of Georgia, sons of former slaves and sons of former slave-owners will be able to sit down together at the table of brotherhood.
+I have a dream that one day, even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with the heat of oppression, will be transformed into an oasis of freedom and justice.
+I have a dream my four little children will one day live in a nation where "
+            android:textSize="25sp"
+            />
+
+    </LinearLayout>
+    </ScrollView>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bottombg"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <TextView
+            android:id="@+id/list_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/list"
+            android:text="@string/list"
+            android:textSize="13sp"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/note_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/note"
+            android:text="@string/note"
+            android:textSize="13sp"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/audio_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/audio"
+            android:text="@string/audio"
+            android:textSize="13sp"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/play_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/play"
+            android:text="@string/play"
+            android:textSize="13sp"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/submit_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/submit"
+            android:text="@string/submit"
+            android:textSize="13sp"
+            android:gravity="center_horizontal"
+            />
+    </LinearLayout>
+</LinearLayout>
