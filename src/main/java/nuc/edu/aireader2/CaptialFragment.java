@@ -38,6 +38,7 @@ class CaptialFragment extends Fragment {
                 //需要穿的参数
                 startActivity(intent);
 
+
             }
         });
     }

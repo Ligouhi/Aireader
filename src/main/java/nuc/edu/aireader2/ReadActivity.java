@@ -19,13 +19,21 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class ReadActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -40,11 +48,12 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
 
     File soundFile= null;
     MediaRecorder mr = null;
-   private TextView audio_tv = null;
-   boolean isRecording = false;
+    private TextView audio_tv = null;
+    boolean isRecording = false;
     MediaPlayer mPlayer = null;
     private  TextView play_tv = null;
     boolean isplay = false;
+    private TextView submit;
 
     public static void verifyAudioPermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity,
@@ -77,6 +86,9 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         audio_tv.setOnClickListener(this);
         play_tv = (TextView)findViewById(R.id.play_tv);
         play_tv.setOnClickListener(this);
+        submit = (TextView)findViewById(R.id.submit_tv);
+        submit.setOnClickListener(this);
+
 
 
 
@@ -169,8 +181,83 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
                 onPlay(isplay);
                 isplay = !isplay;
                 break;
+            case R.id.submit_tv:
+             onSubmit();
+             break;
         }
     }
+
+    private void onSubmit() {
+        String oldFilePath = soundFile.getPath();
+        URL url = null;
+        try {
+            url = new URL("http://10.0.2.2:8000/uploadFile/");
+            File uploadFile = new File(Environment.getExternalStorageDirectory(),oldFilePath);
+
+            Map<String, String> params = new HashMap<String, String>();
+
+
+
+            params.put("title", "qq");
+
+            params.put("timelength", "20");
+            //上传音频文件
+
+            FormFile formfile = new FormFile("02.mp3", uploadFile, "video", "audio/mpeg");
+
+            SocketHttpRequester.post("http://10.0.2.2:8000/upload", params, formfile);
+
+            Toast.makeText(ReadActivity.this,"上传成功！", Toast.LENGTH_LONG).show();
+//            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+//            // 允许Input、Output，不使用Cache
+//            con.setDoInput(true);
+//            con.setDoOutput(true);
+//            con.setUseCaches(false);
+//
+//            con.setConnectTimeout(50000);
+//            con.setReadTimeout(50000);
+//            // 设置传送的method=POST
+//            con.setRequestMethod("POST");
+//            //在一次TCP连接中可以持续发送多份数据而不会断开连接
+//            con.setRequestProperty("Connection", "Keep-Alive");
+//            //设置编码
+//            con.setRequestProperty("Charset", "UTF-8");
+//            //text/plain能上传纯文本文件的编码格式
+//            con.setRequestProperty("Content-Type", "text/plain");
+//            // 设置DataOutputStream
+//            DataOutputStream ds = new DataOutputStream(con.getOutputStream());
+//
+//            // 取得文件的FileInputStream
+//            FileInputStream fStream = new FileInputStream(oldFilePath);
+//
+//            // 设置每次写入1024bytes
+//            int bufferSize = 1024;
+//            byte[] buffer = new byte[bufferSize];
+//
+//            int length = -1;
+//            // 从文件读取数据至缓冲区
+//            while ((length = fStream.read(buffer)) != -1) {
+//                // 将资料写入DataOutputStream中
+//                ds.write(buffer, 0, length);
+//            }
+//            ds.flush();
+//            fStream.close();
+//            ds.close();
+//            if(con.getResponseCode() == 200){
+//                Log.i("success","文件上传成功！上传文件为：" + oldFilePath);
+//            }
+
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        catch (Exception e) {
+        e.printStackTrace();
+        Log.i("fail","文件上传失败！上传文件为：" + oldFilePath);
+        Log.i("error:","报错信息toString：" + e.toString());
+    }}
+    
 
 
     private void setRecord() {
@@ -220,6 +307,10 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
 //　　  //播放之
             mPlayer.start();
         } catch (IOException e) {
+            Toast t = new Toast(this);
+            t.setText("还未录音！");
+            t.show();
+
             Log.e("0", "prepare() failed");
         }
     }

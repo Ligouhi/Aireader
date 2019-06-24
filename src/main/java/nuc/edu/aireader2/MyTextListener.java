@@ -29,7 +29,7 @@ public class MyTextListener extends TextHttpResponseHandler {
     @Override
     public void onSuccess(int i, Header[] headers, String s) {
     msg.what = s_state;
-        msg.obj = headers;
+        msg.obj = s;
         handler.sendMessage(msg);
     }
 }

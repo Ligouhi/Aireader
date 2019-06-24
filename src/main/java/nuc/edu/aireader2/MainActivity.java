@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +26,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment mHotelFragment;
 
     private CircleImageView userimg ;
-
+    private TextView meunid ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
         //设置第一个Fragment默认显示
         setFragment(0);
+
+        meunid = (TextView)drawerView.findViewById(R.id.menuid_tv);
+        if(null == meunid)
+            Log.e("123435","=======================");
 
     }
 
@@ -142,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.userimg:
                 Intent intent = new Intent(this,LoginActivity.class);
                 startActivity(intent);
+                MainActivity.this.finish();
                 break;
             case R.id.captial:
                 setFragment(0);
@@ -245,5 +251,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mTextHotel.setCompoundDrawablesWithIntrinsicBounds(0,
                     R.mipmap.team,0,0);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getIntent().getStringExtra("uid")!=null)
+        {
+            String id = getIntent().getStringExtra("uid");
+            meunid.setText(id);
+        }
+
     }
 }
