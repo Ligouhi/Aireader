@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".BookActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/bp_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background"
+        />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:layout_width="149dp"
+        android:layout_height="180dp"
+        android:src="@mipmap/welcome3"
+        android:layout_marginLeft="20dp"
+        />
+    <TextView
+        android:id="@+id/ba_nametv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="10sp"
+        android:text="测试书籍名字，必须足够长"
+        />
+</LinearLayout>
+    <TextView
+        android:layout_marginTop="15sp"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#686868"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="简介"
+            android:layout_marginLeft="20dp"
+            />
+        <TextView
+            android:id="@+id/ba_infotv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长简介要足够长"
+            android:layout_marginLeft="20dp"
+            />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:text="目录"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    />
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="15sp"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#686868"/>
+
+
+    <GridView
+        android:id="@+id/ba_gv"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:verticalSpacing="10dp"
+        android:numColumns="1"
+        android:listSelector="#ffffff"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/bottombg"
+        android:gravity="bottom"
+
+        android:layout_marginTop="10dp"
+       >
+      <TextView
+          android:id="@+id/star_tv"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:drawableTop="@mipmap/star"
+          android:text="收藏"
+          android:textSize="15sp"
+          android:gravity="center_horizontal"
+          />
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#686868"
+            tools:ignore="Suspicious0dp" />
+        <TextView
+            android:id="@+id/plan_tv"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:text="设为计划"
+            android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+
+            />
+    </LinearLayout>
+</LinearLayout>

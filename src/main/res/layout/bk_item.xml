@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/bk_item"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ImageView
+    android:id="@+id/itm_img"
+    android:layout_width="130dp"
+    android:layout_height="200dp"
+    android:scaleType="center"
+    android:layout_gravity="center_horizontal"
+    />
+    <TextView
+        android:id="@+id/itm_name"
+        android:layout_width="100dp"
+        android:layout_height="22dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        />
+
+</LinearLayout>

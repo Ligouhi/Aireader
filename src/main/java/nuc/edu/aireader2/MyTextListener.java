@@ -21,8 +21,6 @@ public class MyTextListener extends TextHttpResponseHandler {
     @Override
     public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
         msg.what = f_state;
-
-
         handler.sendMessage(msg);
     }
 

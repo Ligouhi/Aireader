@@ -12,8 +12,8 @@ import java.util.Map;
 
 public  class JSONTOOL {
 
-    public static List<Map<String, String>> analyze_some_json (String data ){
-        ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+    public static List<HashMap<String, String>> analyze_some_json (String data ){
+        ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         JSONArray jsons = null;
         try {
             jsons = new JSONArray(data);

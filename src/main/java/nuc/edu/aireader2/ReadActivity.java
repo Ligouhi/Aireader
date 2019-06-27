@@ -10,6 +10,8 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,8 +22,15 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.GridView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -30,8 +39,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,6 +57,7 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+    List<BookData> appList = new ArrayList<>();
     File soundFile= null;
     MediaRecorder mr = null;
     private TextView audio_tv = null;
@@ -54,7 +66,13 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
     private  TextView play_tv = null;
     boolean isplay = false;
     private TextView submit;
+    private TextView rpasname_tv;
+    private  TextView content_tv;
+    private CheckBox trans_btn;
+    private  TextView rplist_tv;
+    private GridView read_gv;
 
+    String Econtent,Ccontent;
     public static void verifyAudioPermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.RECORD_AUDIO);
@@ -74,6 +92,8 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.readpage);
 
+        read_gv = (GridView)findViewById(R.id.read_gv);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.rp_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,8 +108,24 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         play_tv.setOnClickListener(this);
         submit = (TextView)findViewById(R.id.submit_tv);
         submit.setOnClickListener(this);
+        rplist_tv = (TextView)findViewById(R.id.rplist_tv);
+        rplist_tv.setOnClickListener(this);
 
+        rpasname_tv = (TextView)findViewById(R.id.rpasname_tv);
+        content_tv = (TextView)findViewById(R.id.content_tv);
+        trans_btn = (CheckBox)findViewById(R.id.trans_btn);
 
+        trans_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    content_tv.setText(Ccontent);
+
+                }
+                else
+                    content_tv.setText(Econtent);
+            }
+        });
 
 
 
@@ -184,9 +220,65 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.submit_tv:
              onSubmit();
              break;
+
+
         }
     }
 
+    private void listInitData(String name){
+        //加载适配器
+        // Inflate the layout for this fragment
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        HashMap<String,String> map = JSONTOOL.analyze_once_json(msg.obj.toString());
+                        Handler handler = new Handler() {
+                            public void handleMessage(Message msg) {
+                                switch (msg.what) {
+                                    case 1:
+                                    List<HashMap<String,String>> list = JSONTOOL.analyze_some_json(msg.obj.toString());
+                                    for(HashMap<String,String> map : list)
+                                    {
+                                        appList.add(new BookData(map.get("Name")));
+                                    }
+                                    Log.i("ssss","目录加载成功");
+                                    read_gv.setAdapter(new GridAdapter2(ReadActivity.this,appList));
+                                    read_gv.setVisibility(View.VISIBLE);
+                                    break;
+                                case 10:
+                                    Log.i("ssss","目录加载失败");
+                                    break;
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        String name = map.get("From");
+                        AsyncHttpClient client = new AsyncHttpClient();
+                        RequestParams params = new RequestParams();
+                        params.put("method", "_GET");
+                        params.put("db", "Passage");
+                        params.put("From",name);
+                        client.post("http://10.0.2.2:8000/android/", params, new MyTextListener(handler, 1, 10));
+                        break;
+                    case 10:
+                        Log.i("ssss","album加载失败");
+                        break;
+
+                }
+                super.handleMessage(msg);
+            }
+        };
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("method", "_GETPa");
+        params.put("db", "Passage");
+        params.put("Name",name);
+        client.post("http://10.0.2.2:8000/android/", params, new MyTextListener(handler, 1, 10));
+
+
+
+    }
     private void onSubmit() {
         String oldFilePath = soundFile.getPath();
         URL url = null;
@@ -321,5 +413,64 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         mPlayer = null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+     if(getIntent()!=null){
+        final  String name = getIntent().getStringExtra("pas_name");
+        initData(name);
+        rplist_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(read_gv.getVisibility()!=View.VISIBLE)
+                {
+                    listInitData(name);
+                    rplist_tv.setTextColor(getResources()
+                            .getColor(R.color.bule));
+
+                    rplist_tv.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.mipmap.list_press,0,0);
+                }
+                else
+                {
+                    read_gv.setVisibility(View.GONE);
+                    rplist_tv.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.mipmap.list,0,0);
+                }
+            }
+        });
+
+    }
+    }
+
+    private void initData(String name) {
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 3:
+                        HashMap<String,String> map = JSONTOOL.analyze_once_json(msg.obj.toString());
+                        Log.i("ssss","name"+map.get("Econtent"));
+                         Econtent = map.get("Econtent");
+                         Ccontent = map.get("Ccontent");
+                        rpasname_tv.setText(map.get("Name"));
+                        content_tv.setText(Econtent);
+                        break;
+                    case 30:
+                        Log.i("ssss","fail");
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        };
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("method", "_GETPa");
+        params.put("db", "Passage");
+        params.put("Name",name);
+
+        client.post("http://10.0.2.2:8000/android/", params, new MyTextListener(handler, 3, 30));
+//        client.post("http://192.168.43.24:8000/android/", params, new MyTextListener(handler, 3, 30));
+    }
 }
 

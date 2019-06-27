@@ -22,23 +22,24 @@
         android:background="@color/background"
         >
         <TextView
-            android:id="@+id/rppasname_tv"
+            android:id="@+id/rpasname_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Testing"
             android:layout_gravity="center_horizontal"
             android:textSize="30sp"
             />
-        <TextView
+        <CheckBox
             android:layout_marginVertical="20dp"
-            android:id="@+id/rpauthor_tv"
+            android:id="@+id/trans_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="author"
+            android:text="翻译"
             android:textSize="20sp"
             android:layout_marginLeft="20sp"
             />
         <TextView
+            android:id="@+id/content_tv"
             android:layout_width="wrap_content"
             android:layout_marginHorizontal="20sp"
             android:layout_height="match_parent"
@@ -52,6 +53,17 @@ I have a dream my four little children will one day live in a nation where "
 
     </LinearLayout>
     </ScrollView>
+    <GridView
+        android:id="@+id/read_gv"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:verticalSpacing="10dp"
+        android:numColumns="1"
+        android:listSelector="#ffffff"
+        android:visibility="gone"
+        />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +71,7 @@ I have a dream my four little children will one day live in a nation where "
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
         <TextView
-            android:id="@+id/list_tv"
+            android:id="@+id/rplist_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

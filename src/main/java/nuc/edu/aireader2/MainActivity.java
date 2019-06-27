@@ -1,7 +1,9 @@
 package nuc.edu.aireader2;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -43,19 +46,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment mFoodFragment;
     private Fragment mHotelFragment;
 
+
     private CircleImageView userimg ;
     private TextView meunid ;
+    private ActionBarDrawerToggle toggle;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -64,16 +71,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
 
         View drawerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-         userimg = (CircleImageView) drawerView.findViewById(R.id.userimg);
+        meunid = (TextView)drawerView.findViewById(R.id.menuid_tv);
+        userimg = (CircleImageView) drawerView.findViewById(R.id.userimg);
         userimg.setOnClickListener(this);
+
+
+        sharedPreferences = getSharedPreferences("Login",0);
+        if (sharedPreferences.getBoolean("LoginBool", false)) {
+            String id = getIntent().getStringExtra("uid");
+            meunid.setText(sharedPreferences.getString("Account",""));
+            userimg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
+                    intent.putExtra("uid",meunid.getText().toString());
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+
+
+
+
         //初始化
         init();
         //设置第一个Fragment默认显示
         setFragment(0);
 
-        meunid = (TextView)drawerView.findViewById(R.id.menuid_tv);
-        if(null == meunid)
-            Log.e("123435","=======================");
+
+
 
     }
 
@@ -90,12 +117,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,9 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -120,13 +147,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_star) {
+            Intent intent = new Intent(MainActivity.this,CollectActivity.class);
+            startActivity(intent);
+        }
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+         else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -147,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.userimg:
                 Intent intent = new Intent(this,LoginActivity.class);
                 startActivity(intent);
-                MainActivity.this.finish();
+
                 break;
             case R.id.captial:
                 setFragment(0);
@@ -156,7 +182,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setFragment(1);
                 break;
             case R.id.team:
+
                 setFragment(2);
+
                 break;
         }
     }
@@ -260,6 +288,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             String id = getIntent().getStringExtra("uid");
             meunid.setText(id);
+            userimg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
+                    intent.putExtra("uid",meunid.getText().toString());
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
 
     }
