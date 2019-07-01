@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(MainActivity.this,UserActivity.class);
                     intent.putExtra("uid",meunid.getText().toString());
                     startActivity(intent);
-                    finish();
+
                 }
             });
         }
@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            Intent intent = new Intent(MainActivity.this,NoteActivity.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_star) {
             Intent intent = new Intent(MainActivity.this,CollectActivity.class);

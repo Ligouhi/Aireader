@@ -7,80 +7,63 @@
     >
 
     <LinearLayout
-        android:layout_width="343dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:background="@drawable/linearbg"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="20dp"
-            android:scaleType="center"
-            android:src="@mipmap/welcome3" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="阅读小组"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:text="和朋友一起学英语" />
-        </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="343dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:orientation="vertical"
         android:background="@drawable/linearbg"
-        android:orientation="horizontal">
+        >
+<TextView
+    android:layout_marginTop="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="每日一句"
+    android:textSize="30sp"
+    android:layout_gravity="center_horizontal"
+    android:textStyle="bold"
+    android:textColor="@color/bule"
+    />
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="20dp"
-            android:scaleType="center"
-            android:src="@mipmap/welcome3" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/day_en"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="每日一句的橘子"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        />
+        <TextView
+            android:id="@+id/day_cn"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical">
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            />
+</LinearLayout>
+    <CheckBox
+        android:layout_marginTop="30dp"
+        android:id="@+id/ck_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="翻译"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="每日一句"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:text="知识是圈，兴趣是半径" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-
+    <Button
+        android:id="@+id/change_btn"
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bt_shape1"
+        android:layout_gravity="center_horizontal"
+        android:text="换一个"
+        android:textSize="25sp"
+        />
 
 </LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NoteActivity"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/background"
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/nt_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="我的笔记"
+        app:titleMarginStart="20sp"
+        android:background="@color/background"
+        />
+    <GridView
+        android:id="@+id/nt_gv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:verticalSpacing="10dp"
+        android:numColumns="1"
+        android:listSelector="#ffffff"
+        />
+</LinearLayout>

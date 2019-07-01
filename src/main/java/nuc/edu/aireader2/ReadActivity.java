@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -18,12 +19,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -71,6 +74,9 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox trans_btn;
     private  TextView rplist_tv;
     private GridView read_gv;
+    private TextView rpnote_tv;
+    private Button save_tv;
+    private EditText note_et;
 
     String Econtent,Ccontent;
     public static void verifyAudioPermissions(Activity activity) {
@@ -114,6 +120,12 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
         rpasname_tv = (TextView)findViewById(R.id.rpasname_tv);
         content_tv = (TextView)findViewById(R.id.content_tv);
         trans_btn = (CheckBox)findViewById(R.id.trans_btn);
+        rpnote_tv = (TextView)findViewById(R.id.rpnote_tv);
+        save_tv = (Button)findViewById(R.id.save_tv);
+        note_et = (EditText)findViewById(R.id.note_et);
+        rpnote_tv.setOnClickListener(this);
+        save_tv.setOnClickListener(this);
+
 
         trans_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -152,7 +164,9 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
             if(!dir.exists()){
                 dir.mkdirs();
             }
-             soundFile = new File(dir,System.currentTimeMillis()+".mpeg4");
+            SharedPreferences sharedPreferences = getSharedPreferences("Login", 0);
+            String name = sharedPreferences.getString("Account", "");
+             soundFile = new File(dir,name+"-"+rpasname_tv+"-"+System.currentTimeMillis()+".mpeg4");
             if(!soundFile.exists()){
                 try {
                     soundFile.createNewFile();
@@ -220,9 +234,60 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.submit_tv:
              onSubmit();
              break;
+            case R.id.rpnote_tv:
+                if(note_et.getVisibility()!=View.VISIBLE){
+                    note_et.setVisibility(View.VISIBLE);
+                    save_tv.setVisibility(View.VISIBLE);
+                    rpnote_tv.setTextColor(getResources()
+                            .getColor(R.color.bule));
+                    rpnote_tv.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.mipmap.note_press,0,0);
+                }
+                else {
+                    note_et.setVisibility(View.GONE);
+                    save_tv.setVisibility(View.GONE);
+                    rpnote_tv.setTextColor(getResources()
+                            .getColor(R.color.black));
 
+                    rpnote_tv.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.mipmap.note,0,0);
+
+                }
+                break;
+            case R.id.save_tv:
+                saveNote();
+                break;
 
         }
+    }
+
+    private void saveNote() {
+        String note = note_et.getText().toString();
+        String passage = rpasname_tv.getText().toString();
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 3:
+                        Toast.makeText(ReadActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 30:
+                        Log.i("ssss", "fail");
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        };
+        SharedPreferences sharedPreferences = getSharedPreferences("Login", 0);
+        String name = sharedPreferences.getString("Account", "");
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("method", "_POST");
+        params.put("db","Note");
+        params.put("ID", name);
+        params.put("Note", note);
+        params.put("Passage",passage);
+        client.post("http://10.0.2.2:8000/android/", params, new MyTextListener(handler, 3, 30));
+
     }
 
     private void listInitData(String name){
@@ -280,75 +345,19 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     private void onSubmit() {
-        String oldFilePath = soundFile.getPath();
-        URL url = null;
-        try {
-            url = new URL("http://10.0.2.2:8000/uploadFile/");
-            File uploadFile = new File(Environment.getExternalStorageDirectory(),oldFilePath);
+        final String oldFilePath = soundFile.getPath();
+        Log.i("666666",oldFilePath);
 
-            Map<String, String> params = new HashMap<String, String>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String uri =  UpLoadPhotos.init(oldFilePath);
+                Log.i("666666",uri);
 
+            }
+        }).start();
 
-
-            params.put("title", "qq");
-
-            params.put("timelength", "20");
-            //上传音频文件
-
-            FormFile formfile = new FormFile("02.mp3", uploadFile, "video", "audio/mpeg");
-
-            SocketHttpRequester.post("http://10.0.2.2:8000/upload", params, formfile);
-
-            Toast.makeText(ReadActivity.this,"上传成功！", Toast.LENGTH_LONG).show();
-//            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-//            // 允许Input、Output，不使用Cache
-//            con.setDoInput(true);
-//            con.setDoOutput(true);
-//            con.setUseCaches(false);
-//
-//            con.setConnectTimeout(50000);
-//            con.setReadTimeout(50000);
-//            // 设置传送的method=POST
-//            con.setRequestMethod("POST");
-//            //在一次TCP连接中可以持续发送多份数据而不会断开连接
-//            con.setRequestProperty("Connection", "Keep-Alive");
-//            //设置编码
-//            con.setRequestProperty("Charset", "UTF-8");
-//            //text/plain能上传纯文本文件的编码格式
-//            con.setRequestProperty("Content-Type", "text/plain");
-//            // 设置DataOutputStream
-//            DataOutputStream ds = new DataOutputStream(con.getOutputStream());
-//
-//            // 取得文件的FileInputStream
-//            FileInputStream fStream = new FileInputStream(oldFilePath);
-//
-//            // 设置每次写入1024bytes
-//            int bufferSize = 1024;
-//            byte[] buffer = new byte[bufferSize];
-//
-//            int length = -1;
-//            // 从文件读取数据至缓冲区
-//            while ((length = fStream.read(buffer)) != -1) {
-//                // 将资料写入DataOutputStream中
-//                ds.write(buffer, 0, length);
-//            }
-//            ds.flush();
-//            fStream.close();
-//            ds.close();
-//            if(con.getResponseCode() == 200){
-//                Log.i("success","文件上传成功！上传文件为：" + oldFilePath);
-//            }
-
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        catch (Exception e) {
-        e.printStackTrace();
-        Log.i("fail","文件上传失败！上传文件为：" + oldFilePath);
-        Log.i("error:","报错信息toString：" + e.toString());
-    }}
+    }
     
 
 
@@ -435,6 +444,8 @@ public class ReadActivity extends AppCompatActivity implements View.OnClickListe
                 else
                 {
                     read_gv.setVisibility(View.GONE);
+                    rpnote_tv.setTextColor(getResources()
+                            .getColor(R.color.black));
                     rplist_tv.setCompoundDrawablesWithIntrinsicBounds(0,
                             R.mipmap.list,0,0);
                 }

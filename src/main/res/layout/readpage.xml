@@ -64,6 +64,24 @@ I have a dream my four little children will one day live in a nation where "
         android:listSelector="#ffffff"
         android:visibility="gone"
         />
+    <EditText
+        android:id="@+id/note_et"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:hint="记下此刻想法...."
+        android:visibility="gone"
+
+        />
+        <Button
+            android:id="@+id/save_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"
+            android:textSize="10dp"
+            android:visibility="gone"
+            />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,7 +98,7 @@ I have a dream my four little children will one day live in a nation where "
             android:textSize="13sp"
             android:gravity="center_horizontal"/>
         <TextView
-            android:id="@+id/note_tv"
+            android:id="@+id/rpnote_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
